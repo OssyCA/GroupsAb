@@ -244,6 +244,7 @@ The main.js file contains three primary functions:
 ```javascript
 async function GetTeams() {
   try {
+    // Note: The API URL should be configured based on your environment
     const response = await fetch("https://localhost:7224/Teams");
     const data = await response.json();
     // Display logic...
@@ -254,6 +255,7 @@ async function GetTeams() {
 
 async function GetTest() {
   try {
+    // Note: The API URL should be configured based on your environment
     const response = await fetch("https://localhost:7224/Tests");
     const data = await response.json();
     // Display logic...
@@ -280,6 +282,34 @@ The application has responsive styling with:
 - Form styling
 
 ## Setup and Configuration
+
+### API URL Configuration
+
+The frontend JavaScript code currently has hardcoded API URLs (e.g., "https://localhost:7224/Teams"). For a more robust solution, consider:
+
+1. Creating a configuration file in your frontend:
+   ```javascript
+   // config.js
+   const config = {
+     apiBaseUrl: 'https://localhost:7224'  // Default development URL
+   };
+   ```
+
+2. Using this configuration in your API calls:
+   ```javascript
+   async function GetTeams() {
+     try {
+       const response = await fetch(`${config.apiBaseUrl}/Teams`);
+       // Rest of the function...
+     } catch (error) {
+       console.log("Error: ", error);
+     }
+   }
+   ```
+
+3. This approach makes it easier to change the API URL in one place when deploying to different environments.
+
+
 
 ### Prerequisites
 
@@ -309,7 +339,7 @@ Example connection string format:
    dotnet run
    ```
    or open the solution in Visual Studio and run it from there.
-3. The API will be available at https://localhost:7224 and http://localhost:5159
+3. The API will be available at the URLs configured in your launchSettings.json file (by default https://localhost:7224 and http://localhost:5159, but these may vary)
 
 #### Frontend
 1. Open the `index.html` file in a web browser
@@ -351,6 +381,9 @@ Example connection string format:
 ### API Connection Issues
 - Verify that the backend API is running
 - Check that the ports in your frontend code match the ports in the launchSettings.json file
+  - The default ports in launchSettings.json are https://localhost:7224 and http://localhost:5159, but these may be different in your environment
+  - You may need to update the API URLs in the frontend JavaScript files to match your actual running ports
+- Consider using a configuration approach for API URLs rather than hardcoding them
 - Ensure CORS is properly configured
 - Check browser console for error messages
 
